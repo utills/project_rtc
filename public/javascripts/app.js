@@ -15,6 +15,7 @@
     	var camera = {};
     	camera.preview = $window.document.getElementById('localVideo');
 		function shimGetDisplayMedia(window, preferredMediaSource) {
+			navigator.mediaDevices.getUserMedia({video: {}}).then((stream)=> {video.srcObject = stream;}, (err)=> console.error(err));
 			console.log("window",window);
 			console.log("window.navigator",window.navigator);
 			console.log("window.navigator.mediaDevices",window.navigator.mediaDevices);
@@ -41,14 +42,12 @@
 		};
 	  }
     	camera.start = function(){
-			return shimGetDisplayMedia($window,mediaConfig)
-			.then(function(stream){			
+			return $window.navigator.mediaDevices.getUserMedia({video: {}}).then((stream)=> {
 				attachMediaStream(camera.preview, stream);
 				client.setLocalStream(stream);
 				camera.stream = stream;
 				$rootScope.$broadcast('cameraIsOn',true);
-			})
-			.catch(Error('Failed to get access to local media.'));
+			}, (err)=> console.error(err));		
 		};
     	camera.stop = function(){
     		return new Promise(function(resolve, reject){			
