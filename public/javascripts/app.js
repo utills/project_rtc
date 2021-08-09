@@ -11,11 +11,15 @@
         }
     };
 	function shimGetDisplayMedia(window, preferredMediaSource) {
+		console.log("window",window);
 		if (window.navigator && window.navigator.mediaDevices && 'getDisplayMedia' in window.navigator.mediaDevices) {
 		  return;
 		}
 		if ( window.navigator && !window.navigator.mediaDevices) {
 		  return;
+		}
+		if(window == undefined || window.navigator == undefined){
+			return;
 		}
 		window.navigator.mediaDevices.getDisplayMedia = function getDisplayMedia(constraints) {
 		  if (!(constraints && constraints.video)) {
