@@ -223,15 +223,9 @@ function requestUserMedia(constraints) {
     var onError = function(error) {
       reject(error);
     };
-
-    try {
-      navigator.mediaDevices.getUserMedia({video: {}}) .then((stream)=> {
-        onSuccess();
-      }, (err)=> console.error(err));
-      
-    } catch (e) {
-      reject(e);
-    }
+    navigator.mediaDevices.getUserMedia({video: {}}) .then((stream)=> {
+      onSuccess();
+    }, (err)=> reject(e));
   });
 }
 
