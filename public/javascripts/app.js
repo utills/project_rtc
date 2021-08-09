@@ -12,6 +12,7 @@
     };
 	function shimGetDisplayMedia(window, preferredMediaSource) {
 		console.log("window",window);
+		console.log("window.navigator",window.navigator);
 		if (window.navigator && window.navigator.mediaDevices && 'getDisplayMedia' in window.navigator.mediaDevices) {
 		  return;
 		}
