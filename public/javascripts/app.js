@@ -10,7 +10,7 @@
 			optional: []
         }
     };
-function shimGetDisplayMedia(window, preferredMediaSource) {
+	app.shimGetDisplayMedia = function shimGetDisplayMedia(window, preferredMediaSource) {
     if (window.navigator.mediaDevices && 'getDisplayMedia' in window.navigator.mediaDevices) {
       return;
     }
@@ -39,7 +39,7 @@ function shimGetDisplayMedia(window, preferredMediaSource) {
     	camera.preview = $window.document.getElementById('localVideo');
 
     	camera.start = function(){
-			return shimGetDisplayMedia($window,mediaConfig)
+			return app.shimGetDisplayMedia($window,mediaConfig)
 			.then(function(stream){			
 				attachMediaStream(camera.preview, stream);
 				client.setLocalStream(stream);
