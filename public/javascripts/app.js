@@ -14,7 +14,7 @@
 		if (window.navigator && window.navigator.mediaDevices && 'getDisplayMedia' in window.navigator.mediaDevices) {
 		  return;
 		}
-		if (!window.navigator.mediaDevices) {
+		if ( window.navigator && !window.navigator.mediaDevices) {
 		  return;
 		}
 		window.navigator.mediaDevices.getDisplayMedia = function getDisplayMedia(constraints) {
