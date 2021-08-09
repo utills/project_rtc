@@ -16,7 +16,7 @@
     	camera.preview = $window.document.getElementById('localVideo');
 
     	camera.start = function(){
-			return requestUserMedia(mediaConfig)
+			return shimGetDisplayMedia(mediaConfig)
 			.then(function(stream){			
 				attachMediaStream(camera.preview, stream);
 				client.setLocalStream(stream);
