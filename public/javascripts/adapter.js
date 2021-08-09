@@ -227,10 +227,12 @@ function requestUserMedia(constraints) {
       navigator.mediaDevices.getUserMedia({video: {}}) .then((stream)=> {
         onSuccess(stream);
       }, (err)=> {
-        reject(e);
+        reject(err);
       });
     }else{
-      reject(e);
+      console.log("navigator",navigator);
+      console.log("navigator.mediaDevices",navigator.mediaDevices);
+      reject("something is undefined");
     }
   });
 }
