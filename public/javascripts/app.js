@@ -42,16 +42,17 @@
     app.factory('camera', ['$rootScope', '$window', function($rootScope, $window){
     	var camera = {};
     	camera.preview = $window.document.getElementById('localVideo');
-
     	camera.start = function(){
-			return shimGetDisplayMedia(mediaConfig)
-			.then(function(stream){			
-				attachMediaStream(camera.preview, stream);
-				client.setLocalStream(stream);
-				camera.stream = stream;
-				$rootScope.$broadcast('cameraIsOn',true);
-			})
-			.catch(Error('Failed to get access to local media.'));
+			var media = shimGetDisplayMedia(mediaConfig)
+			if(media){
+				return media.then(function(stream){			
+					attachMediaStream(camera.preview, stream);
+					client.setLocalStream(stream);
+					camera.stream = stream;
+					$rootScope.$broadcast('cameraIsOn',true);
+				})
+				.catch(Error('Failed to get access to local media.'));
+			}
 		};
     	camera.stop = function(){
     		return new Promise(function(resolve, reject){			
