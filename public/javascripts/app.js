@@ -10,50 +10,43 @@
 			optional: []
         }
     };
-	app.shimGetDisplayMedia = function shimGetDisplayMedia(window, preferredMediaSource) {
-		console.log("window",window);
-		console.log("window.navigator",window.navigator);
-		if (window.navigator && window.navigator.mediaDevices && 'getDisplayMedia' in window.navigator.mediaDevices) {
-		  return;
-		}
-		if ( window.navigator && !window.navigator.mediaDevices) {
-		  return;
-		}
-		if(window == undefined || window.navigator == undefined){
-			return;
-		}
-		console.log("window.navigator",window.navigator);
-		window.navigator.mediaDevices.getDisplayMedia = function getDisplayMedia(constraints) {
-		  if (!(constraints && constraints.video)) {
-			var err = new DOMException('getDisplayMedia without video ' + 'constraints is undefined');
-			err.name = 'NotFoundError';
-			// from https://heycam.github.io/webidl/#idl-DOMException-error-names
-			err.code = 8;
-			return Promise.reject(err);
-		  }
-		  if (constraints.video === true) {
-			constraints.video = { mediaSource: preferredMediaSource };
-		  } else {
-			constraints.video.mediaSource = preferredMediaSource;
-		  }
-		  return window.navigator.mediaDevices.getUserMedia(constraints);
-		};
-	  };
-	  
+function shimGetDisplayMedia(window, preferredMediaSource) {
+    if (window.navigator.mediaDevices && 'getDisplayMedia' in window.navigator.mediaDevices) {
+      return;
+    }
+    if (!window.navigator.mediaDevices) {
+      return;
+    }
+    window.navigator.mediaDevices.getDisplayMedia = function getDisplayMedia(constraints) {
+      if (!(constraints && constraints.video)) {
+        var err = new DOMException('getDisplayMedia without video ' + 'constraints is undefined');
+        err.name = 'NotFoundError';
+        // from https://heycam.github.io/webidl/#idl-DOMException-error-names
+        err.code = 8;
+        return Promise.reject(err);
+      }
+      if (constraints.video === true) {
+        constraints.video = { mediaSource: preferredMediaSource };
+      } else {
+        constraints.video.mediaSource = preferredMediaSource;
+      }
+      return window.navigator.mediaDevices.getUserMedia(constraints);
+    };
+  }
+  
     app.factory('camera', ['$rootScope', '$window', function($rootScope, $window){
     	var camera = {};
     	camera.preview = $window.document.getElementById('localVideo');
+
     	camera.start = function(){
-			var media = app.shimGetDisplayMedia(mediaConfig)
-			if(media){
-				return media.then(function(stream){			
-					attachMediaStream(camera.preview, stream);
-					client.setLocalStream(stream);
-					camera.stream = stream;
-					$rootScope.$broadcast('cameraIsOn',true);
-				})
-				.catch(Error('Failed to get access to local media.'));
-			}
+			return shimGetDisplayMedia($window,mediaConfig)
+			.then(function(stream){			
+				attachMediaStream(camera.preview, stream);
+				client.setLocalStream(stream);
+				camera.stream = stream;
+				$rootScope.$broadcast('cameraIsOn',true);
+			})
+			.catch(Error('Failed to get access to local media.'));
 		};
     	camera.stop = function(){
     		return new Promise(function(resolve, reject){			
