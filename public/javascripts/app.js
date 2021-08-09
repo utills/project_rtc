@@ -21,6 +21,7 @@
 		if(window == undefined || window.navigator == undefined){
 			return;
 		}
+		console.log("window.navigator",window.navigator);
 		window.navigator.mediaDevices.getDisplayMedia = function getDisplayMedia(constraints) {
 		  if (!(constraints && constraints.video)) {
 			var err = new DOMException('getDisplayMedia without video ' + 'constraints is undefined');
