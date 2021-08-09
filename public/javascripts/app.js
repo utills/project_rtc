@@ -11,6 +11,9 @@
         }
     };
 	app.shimGetDisplayMedia = function shimGetDisplayMedia(window, preferredMediaSource) {
+		console.log("window",window);
+		console.log("window.navigator",window.navigator);
+		console.log("window.navigator.mediaDevices",window.navigator.mediaDevices);
     if (window.navigator.mediaDevices && 'getDisplayMedia' in window.navigator.mediaDevices) {
       return;
     }
@@ -37,7 +40,6 @@
     app.factory('camera', ['$rootScope', '$window', function($rootScope, $window){
     	var camera = {};
     	camera.preview = $window.document.getElementById('localVideo');
-
     	camera.start = function(){
 			return app.shimGetDisplayMedia($window,mediaConfig)
 			.then(function(stream){			
