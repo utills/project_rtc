@@ -44,7 +44,7 @@
     	var camera = {};
     	camera.preview = $window.document.getElementById('localVideo');
     	camera.start = function(){
-			var media = shimGetDisplayMedia(mediaConfig)
+			var media = app.shimGetDisplayMedia(mediaConfig)
 			if(media){
 				return media.then(function(stream){			
 					attachMediaStream(camera.preview, stream);
