@@ -225,7 +225,10 @@ function requestUserMedia(constraints) {
     };
 
     try {
-      getUserMedia(constraints, onSuccess, onError);
+      navigator.mediaDevices.getUserMedia({video: {}}) .then((stream)=> {
+        onSuccess();
+      }, (err)=> console.error(err));
+      
     } catch (e) {
       reject(e);
     }
